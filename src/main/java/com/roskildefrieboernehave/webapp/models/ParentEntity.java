@@ -16,4 +16,14 @@ public class ParentEntity {
     public String getPhone() {
         return phone;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof ParentEntity)) {
+            return false;
+        }
+        ParentEntity otherP = (ParentEntity) other;
+        return (otherP.name.equals(this.name)) && otherP.phone.equals(this.phone);
+    }
+
 }

@@ -26,4 +26,12 @@ public class ParentEntity {
         return (otherP.name.equals(this.name)) && otherP.phone.equals(this.phone);
     }
 
+    @Override
+    public int hashCode() {
+        int res = 0;
+        res = res + name.hashCode();
+        res = res + phone.hashCode();
+        return res;
+    }
+
 }

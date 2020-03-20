@@ -1,5 +1,7 @@
 package com.roskildefrieboernehave.webapp.utils;
+
 import org.json.JSONObject;
+
 import java.io.File;
 import java.util.Scanner;
 

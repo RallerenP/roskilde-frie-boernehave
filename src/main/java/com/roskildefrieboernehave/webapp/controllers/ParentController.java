@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ParentController {
 
+    ParentService ps = new ParentService();
+
     @GetMapping("/parents")
-    public ParentEntity getAll() {
-        return new ParentEntity("Søren", "88888888");
+    public ParentEntity[] getAll() {
+        return ps.getAll();
     }
 
 }

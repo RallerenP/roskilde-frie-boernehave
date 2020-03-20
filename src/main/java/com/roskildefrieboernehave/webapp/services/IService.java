@@ -1,4 +1,8 @@
 package com.roskildefrieboernehave.webapp.services;
 
-public interface IService {
+public interface IService<T> {
+
+    T[] getAll();
+
+
 }

@@ -25,12 +25,74 @@ public class ParentService implements IService<ParentEntity> {
         return parentArr;
     }
 
+    @Override
+    public ParentEntity get(int ID) {
+        JSONObject o = fm.extractFromParentFile(ID);
+        ParentEntity parent = mapToParent(o);
+
+        return getFromHashSet(parent);
+    }
+
+    @Override
+    public ParentEntity edit(int ID, JSONObject update) {
+        JSONObject old = fm.extractFromParentFile(ID);
+        if (update.has("name")) old.put("name", update.getString("name"));
+        if (update.has("phone")) old.put("phone", update.getString("phone"));
+
+        parents.remove(get(ID));
+
+        fm.writeToParentFile(ID, old);
+
+        return getFromHashSet(mapToParent(old));
+    }
+
+    @Override
+    public ParentEntity create(JSONObject json) {
+        // TODO Error handling
+        if (!json.has("name") || !json.has("phone")) return null;
+
+        String name = json.getString("name"), phone = json.getString("phone");
+        int ID = fm.getParentIndex() + 1;
+
+        ParentEntity pe = new ParentEntity(name, phone, ID);
+
+        fm.writeToParentFile(ID, mapToJSON(pe));
+        fm.writeToParentFile("index", ID);
+
+        return pe;
+    }
+
+    @Override
+    public boolean delete(int ID) {
+        parents.remove(get(ID));
+        return fm.deleteFromParentFile(ID);
+    }
+
+    private ParentEntity getFromHashSet(ParentEntity parent) {
+        if (parents.contains(parent)) {
+            for (ParentEntity p : parents) {
+                if (p.equals(parent)) return p;
+            }
+        }
+
+        return parent;
+    }
+
     private ParentEntity mapToParent(JSONObject object) {
         //TODO add error handling
 
         String name = object.getString("name");
         String phone = object.getString("phone");
+        int ID = object.getInt("ID");
 
-        return new ParentEntity(name, phone);
+        return new ParentEntity(name, phone, ID);
+    }
+
+    private JSONObject mapToJSON(ParentEntity parent) {
+        JSONObject json = new JSONObject();
+        json.put("name", parent.getName());
+        json.put("phone", parent.getPhone());
+        json.put("ID", parent.getID());
+        return json;
     }
 }

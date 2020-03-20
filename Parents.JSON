@@ -1,18 +1,15 @@
 {
     "1": {
-        "phone": "8888888",
-        "name": "Jesper",
+        "phone": "34278782312343453453456645e334",
+        "name": "Ludvasdiasdf",
+        "childrenIds": [3],
         "ID": 1
     },
     "2": {
-        "phone": "12344321",
-        "name": "Ida",
-        "ID": 2
-    },
-    "6": {
         "phone": "34278782312343453453456645e334",
         "name": "Ludvasdiasdf",
-        "ID": 6
+        "childrenIds": [],
+        "ID": 2
     },
-    "index": 6
+    "index": 2
 }

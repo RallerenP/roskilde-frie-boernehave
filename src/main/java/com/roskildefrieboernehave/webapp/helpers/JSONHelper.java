@@ -1,5 +1,6 @@
 package com.roskildefrieboernehave.webapp.helpers;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -13,6 +14,14 @@ public class JSONHelper {
             arr.add((JSONObject)object.get(key));
         });
         return arr;
+    }
+
+    public static int[] toIntArray(JSONArray arr) {
+        int[] intArr = new int[arr.length()];
+        for (int i = 0; i < arr.length(); i++) {
+            intArr[i] = arr.getInt(i);
+        }
+        return intArr;
     }
 
 }

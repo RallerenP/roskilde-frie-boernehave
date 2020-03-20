@@ -1,47 +1,47 @@
 package com.roskildefrieboernehave.webapp.controllers;
+
 import com.roskildefrieboernehave.webapp.entities.ParentEntity;
 import com.roskildefrieboernehave.webapp.services.ParentService;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ParentController {
+public class ChildController {
+    ParentService cs = new ChildService();
 
-    ParentService ps = new ParentService();
-
-    @GetMapping("/parents")
+    @GetMapping("/children")
     public ParentEntity[] getAll() {
-        return ps.getAll();
+        return cs.getAll();
     }
 
-    @GetMapping("/parents/{id}")
+    @GetMapping("/children/{id}")
     public ParentEntity get(
             @PathVariable("id") int id
     ) {
-        return ps.get(id);
+        return cs.get(id);
     }
 
-    @PutMapping("/parents/{id}")
+    @PutMapping("/children/{id}")
     public ParentEntity edit(
             @PathVariable("id") int id,
             @RequestBody String s
-            ) {
+    ) {
         JSONObject o = new JSONObject(s);
-        return ps.edit(id, o);
+        return cs.edit(id, o);
     }
 
-    @PostMapping("/parents")
+    @PostMapping("/children")
     public ParentEntity create(
             @RequestBody String s
     ) {
         JSONObject o = new JSONObject(s);
-        return ps.create(o);
+        return cs.create(o);
     }
 
-    @DeleteMapping("/parents/{id}")
+    @DeleteMapping("/children/{id}")
     public boolean delete(
             @PathVariable("id") int id
     ) {
-        return ps.delete(id);
+        return cs.delete(id);
     }
 }

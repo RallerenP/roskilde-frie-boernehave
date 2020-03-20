@@ -1,11 +1,14 @@
 package com.roskildefrieboernehave.webapp.services;
 import com.roskildefrieboernehave.webapp.helpers.JSONHelper;
-import com.roskildefrieboernehave.webapp.models.ParentEntity;
+import com.roskildefrieboernehave.webapp.entities.ParentEntity;
 import com.roskildefrieboernehave.webapp.utils.FileManager;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 
 public class ParentService implements IService<ParentEntity> {
@@ -54,7 +57,7 @@ public class ParentService implements IService<ParentEntity> {
         String name = json.getString("name"), phone = json.getString("phone");
         int ID = fm.getParentIndex() + 1;
 
-        ParentEntity pe = new ParentEntity(name, phone, ID);
+        ParentEntity pe = new ParentEntity(name, phone, ID, new int[0]);
 
         fm.writeToParentFile(ID, mapToJSON(pe));
         fm.writeToParentFile("index", ID);
@@ -83,9 +86,11 @@ public class ParentService implements IService<ParentEntity> {
 
         String name = object.getString("name");
         String phone = object.getString("phone");
+        JSONArray childArr = object.getJSONArray("childrenIds");
+        int[] childrenIds = JSONHelper.toIntArray(childArr);
         int ID = object.getInt("ID");
 
-        return new ParentEntity(name, phone, ID);
+        return new ParentEntity(name, phone, ID, childrenIds);
     }
 
     private JSONObject mapToJSON(ParentEntity parent) {
@@ -93,6 +98,7 @@ public class ParentService implements IService<ParentEntity> {
         json.put("name", parent.getName());
         json.put("phone", parent.getPhone());
         json.put("ID", parent.getID());
+        json.put("childrenIds", parent.getChildrenIds());
         return json;
     }
 }

@@ -1,7 +1,7 @@
-package com.roskildefrieboernehave.webapp.models;
+package com.roskildefrieboernehave.webapp.entities;
 
 public abstract class BaseEntity {
-    private int ID;
+    int ID;
 
     @Override
     public abstract boolean equals(Object o);

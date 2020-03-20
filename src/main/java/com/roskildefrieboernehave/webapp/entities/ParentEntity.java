@@ -1,14 +1,15 @@
-package com.roskildefrieboernehave.webapp.models;
+package com.roskildefrieboernehave.webapp.entities;
 
 public class ParentEntity extends BaseEntity {
 
     private String name, phone;
-    private int ID;
+    private int[] childrenIds;
 
-    public ParentEntity(String name, String phone, int ID) {
+    public ParentEntity(String name, String phone, int ID, int[] childrenIds) {
         this.name = name;
         this.phone = phone;
         this.ID = ID;
+        this.childrenIds = childrenIds;
     }
 
     public String getName() {
@@ -21,6 +22,10 @@ public class ParentEntity extends BaseEntity {
 
     public int getID() {
         return ID;
+    }
+
+    public int[] getChildrenIds() {
+        return childrenIds;
     }
 
     @Override

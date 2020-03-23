@@ -4,7 +4,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class FileManager {
@@ -16,13 +18,8 @@ public class FileManager {
 
     public String readAllLines() {
         try {
-            Scanner sc = new Scanner(file);
-            String tmp = "";
-            while (sc.hasNext()) {
-                tmp += sc.next();
-            }
-            return tmp;
-        } catch (FileNotFoundException e) { return null; }
+            return Files.readString(file.toPath());
+        } catch (IOException e) { return null; }
     }
 
     public boolean writeAllLines(String content) {

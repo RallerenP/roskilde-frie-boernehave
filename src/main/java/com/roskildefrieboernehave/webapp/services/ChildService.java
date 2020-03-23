@@ -51,7 +51,7 @@ public class ChildService implements IService<ChildEntity> {
         if (update.has("birthday")) old.put("birthday", update.getString("birthday"));
         if (update.has("parentIds")) old.put("parentIds", update.getJSONArray("parentIds"));
 
-        children.remove(get(ID));
+        children.remove(getEntity(ID));
 
         fm.writeToChildFile(ID, old);
         return Child.fromEntity(getFromHashSet(mapToChildEntity(old)));

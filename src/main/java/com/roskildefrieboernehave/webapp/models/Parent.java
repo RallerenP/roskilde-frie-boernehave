@@ -33,7 +33,6 @@ public class Parent {
         this.name = pe.getName();
         this.phone = pe.getPhone();
         this.ID = pe.getID();
-        this.pe = pe;
     }
 
     public static Parent fromEntity(ParentEntity pe) {

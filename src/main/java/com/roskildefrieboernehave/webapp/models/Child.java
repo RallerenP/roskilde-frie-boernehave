@@ -13,7 +13,6 @@ public class Child {
     private ArrayList<ParentEntity> parents = new ArrayList<>();
     private String name, birthday;
     private int ID;
-    private ChildEntity ce;
 
     public int getID() {
         return ID;
@@ -31,15 +30,10 @@ public class Child {
         return birthday;
     }
 
-    public ChildEntity _getCe() {
-        return ce;
-    }
-
     private Child(ChildEntity ce) {
         this.name = ce.getName();
         this.birthday = ce.getBirthday();
         this.ID = ce.getID();
-        this.ce = ce;
     }
 
     public static Child fromEntity(ChildEntity ce) {

@@ -12,8 +12,6 @@ public class Parent {
     private ArrayList<ChildEntity> children = new ArrayList<>();
     private String name, phone;
     private int ID;
-    private ParentEntity pe;
-
 
     public int getID() {
         return ID;
@@ -29,10 +27,6 @@ public class Parent {
 
     public String getPhone() {
         return phone;
-    }
-
-    public ParentEntity _getPe() {
-        return pe;
     }
 
     private Parent(ParentEntity pe) {

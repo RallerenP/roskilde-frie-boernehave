@@ -5,15 +5,17 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ParentController {
+public class ParentController implements IController {
 
     ParentService ps = ParentService.getInstance();
 
+    @Override
     @GetMapping("/parents")
     public Parent[] getAll() {
         return ps.getAll();
     }
 
+    @Override
     @GetMapping("/parents/{id}")
     public Parent get(
             @PathVariable("id") int id
@@ -21,6 +23,7 @@ public class ParentController {
         return ps.get(id);
     }
 
+    @Override
     @PutMapping("/parents/{id}")
     public Parent edit(
             @PathVariable("id") int id,
@@ -30,6 +33,7 @@ public class ParentController {
         return ps.edit(id, o);
     }
 
+    @Override
     @PostMapping("/parents")
     public Parent create(
             @RequestBody String s
@@ -38,6 +42,7 @@ public class ParentController {
         return ps.create(o);
     }
 
+    @Override
     @DeleteMapping("/parents/{id}")
     public boolean delete(
             @PathVariable("id") int id

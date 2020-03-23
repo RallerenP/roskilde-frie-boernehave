@@ -1,4 +1,5 @@
 package com.roskildefrieboernehave.webapp.services;
+import com.roskildefrieboernehave.webapp.DB.DBManager;
 import com.roskildefrieboernehave.webapp.helpers.JSONHelper;
 import com.roskildefrieboernehave.webapp.entities.ParentEntity;
 import com.roskildefrieboernehave.webapp.models.Parent;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 
-public class ParentService implements IService<ParentEntity> {
+public class ParentService implements IService<Parent> {
 
     private HashSet<ParentEntity> parents = new HashSet<ParentEntity>();
-    private FileManager fm = FileManager.getInstance();
+    private DBManager parentDB = new DBManager("Parents.JSON");
 
     public static ParentService getInstance() {
         return instance;
@@ -23,10 +24,10 @@ public class ParentService implements IService<ParentEntity> {
     private ParentService() { }
 
     public Parent[] getAll() {
-        JSONObject o = fm.extractFromParentFile();
+        JSONObject o = parentDB.queryAll();
         ArrayList<JSONObject> arr = JSONHelper.getKeyArray(o);
         for (JSONObject x : arr) {
-            parents.add(mapToParentEntity(x));
+            parents.add(mapToEntity(x));
         }
         Parent[] parentArr = new Parent[parents.size()];
         int count = 0;
@@ -42,23 +43,23 @@ public class ParentService implements IService<ParentEntity> {
     }
 
     public ParentEntity getEntity(int ID) {
-        JSONObject o = fm.extractFromParentFile(ID);
-        ParentEntity parent = mapToParentEntity(o);
+        JSONObject o = parentDB.queryById(ID);
+        ParentEntity parent = mapToEntity(o);
 
         return getFromHashSet(parent);
     }
 
     public Parent edit(int ID, JSONObject update) {
-        JSONObject old = fm.extractFromParentFile(ID);
+        JSONObject old = parentDB.queryById(ID);
         if (update.has("name")) old.put("name", update.getString("name"));
         if (update.has("phone")) old.put("phone", update.getString("phone"));
         if (update.has("childrenIds")) old.put("childrenIds", update.getJSONArray("childrenIds"));
 
         parents.remove(getEntity(ID));
 
-        fm.writeToParentFile(ID, old);
+        parentDB.write(ID, old);
 
-        return Parent.fromEntity(getFromHashSet(mapToParentEntity(old)));
+        return Parent.fromEntity(getFromHashSet(mapToEntity(old)));
     }
 
     public Parent create(JSONObject json) {
@@ -66,19 +67,19 @@ public class ParentService implements IService<ParentEntity> {
         if (!json.has("name") || !json.has("phone")) return null;
 
         String name = json.getString("name"), phone = json.getString("phone");
-        int ID = fm.getParentIndex() + 1;
+        int ID = parentDB.getIndex() + 1;
 
         ParentEntity pe = new ParentEntity(name, phone, ID, new int[0]);
 
-        fm.writeToParentFile(ID, mapToJSON(pe));
-        fm.writeToParentFile("index", ID);
+        parentDB.write(ID, mapToJSON(pe));
+        parentDB.write("index", ID);
 
         return Parent.fromEntity(pe);
     }
 
     public boolean delete(int ID) {
         parents.remove(get(ID));
-        return fm.deleteFromParentFile(ID);
+        return parentDB.delete(ID);
     }
 
     private ParentEntity getFromHashSet(ParentEntity parent) {
@@ -91,7 +92,7 @@ public class ParentService implements IService<ParentEntity> {
         return parent;
     }
 
-    private ParentEntity mapToParentEntity(JSONObject object) {
+    private ParentEntity mapToEntity(JSONObject object) {
         //TODO add error handling
 
         String name = object.getString("name");

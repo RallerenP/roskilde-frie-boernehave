@@ -1,30 +1,29 @@
 package com.roskildefrieboernehave.webapp.controllers;
 
 import com.roskildefrieboernehave.webapp.entities.ChildEntity;
-import com.roskildefrieboernehave.webapp.entities.ParentEntity;
+import com.roskildefrieboernehave.webapp.models.Child;
 import com.roskildefrieboernehave.webapp.services.ChildService;
-import com.roskildefrieboernehave.webapp.services.ParentService;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ChildController {
-    ChildService cs = new ChildService();
+    ChildService cs = ChildService.getInstance();
 
     @GetMapping("/children")
-    public ChildEntity[] getAll() {
+    public Child[] getAll() {
         return cs.getAll();
     }
 
     @GetMapping("/children/{id}")
-    public ChildEntity get(
+    public Child get(
             @PathVariable("id") int id
     ) {
         return cs.get(id);
     }
 
     @PutMapping("/children/{id}")
-    public ChildEntity edit(
+    public Child edit(
             @PathVariable("id") int id,
             @RequestBody String s
     ) {
@@ -33,7 +32,7 @@ public class ChildController {
     }
 
     @PostMapping("/children")
-    public ChildEntity create(
+    public Child create(
             @RequestBody String s
     ) {
         JSONObject o = new JSONObject(s);

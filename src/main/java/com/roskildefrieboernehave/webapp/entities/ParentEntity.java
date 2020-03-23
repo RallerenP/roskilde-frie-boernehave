@@ -20,7 +20,7 @@ public class ParentEntity extends BaseEntity {
         return phone;
     }
 
-    public int[] getChildrenIds() {
+    public int[] _getChildrenIds() {
         return childrenIds;
     }
 

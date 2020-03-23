@@ -2,6 +2,7 @@ package com.roskildefrieboernehave.webapp.services;
 
 import com.roskildefrieboernehave.webapp.entities.ChildEntity;
 import com.roskildefrieboernehave.webapp.helpers.JSONHelper;
+import com.roskildefrieboernehave.webapp.models.Child;
 import com.roskildefrieboernehave.webapp.utils.FileManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,40 +14,50 @@ public class ChildService implements IService<ChildEntity> {
     private HashSet<ChildEntity> children = new HashSet<>();
     private FileManager fm = FileManager.getInstance();
 
-    @Override
-    public ChildEntity[] getAll() {
+    private static ChildService instance = new ChildService();
+    public static ChildService getInstance() { return instance; }
+    private ChildService() {}
+
+
+    public Child[] getAll() {
         JSONObject o = fm.extractFromChildFile();
         ArrayList<JSONObject> arr = JSONHelper.getKeyArray(o);
         for (JSONObject x : arr) {
-            children.add(mapToChild(x));
+            children.add(mapToChildEntity(x));
         }
-        ChildEntity[] childArr = new ChildEntity[children.size()];
-        children.toArray(childArr);
+        Child[] childArr = new Child[children.size()];
+        int count = 0;
+        for (ChildEntity ce : children) {
+            childArr[count] = Child.fromEntity(ce);
+            count++;
+        }
         return childArr;
     }
 
-    @Override
-    public ChildEntity get(int ID) {
+    public Child get(int ID) {
+        return Child.fromEntity(getEntity(ID));
+    }
+
+    public ChildEntity getEntity(int ID) {
         JSONObject o = fm.extractFromChildFile(ID);
-        ChildEntity child = mapToChild(o);
+        ChildEntity child = mapToChildEntity(o);
 
         return getFromHashSet(child);
     }
 
-    @Override
-    public ChildEntity edit(int ID, JSONObject update) {
+    public Child edit(int ID, JSONObject update) {
         JSONObject old = fm.extractFromChildFile(ID);
         if (update.has("name")) old.put("name", update.getString("name"));
         if (update.has("birthday")) old.put("birthday", update.getString("birthday"));
+        if (update.has("parentIds")) old.put("parentIds", update.getJSONArray("parentIds"));
 
         children.remove(get(ID));
 
         fm.writeToChildFile(ID, old);
-        return getFromHashSet(mapToChild(old));
+        return Child.fromEntity(getFromHashSet(mapToChildEntity(old)));
     }
 
-    @Override
-    public ChildEntity create(JSONObject json) {
+    public Child create(JSONObject json) {
         // TODO error handling
         if (!json.has("name") || !json.has("birthday")) return null;
         String name = json.getString("name"), birthday = json.getString("birthday");
@@ -57,10 +68,9 @@ public class ChildService implements IService<ChildEntity> {
         fm.writeToChildFile(ID, mapToJSON(ce));
         fm.writeToChildFile("index", ID);
 
-        return ce;
+        return Child.fromEntity(ce);
     }
 
-    @Override
     public boolean delete(int ID) {
         children.remove(get(ID));
         return fm.deleteFromChildFile(ID);
@@ -76,7 +86,7 @@ public class ChildService implements IService<ChildEntity> {
         return parent;
     }
 
-    private ChildEntity mapToChild(JSONObject object) {
+    private ChildEntity mapToChildEntity(JSONObject object) {
         // TODO add error handling
         String name = object.getString("name");
         String birthday = object.getString("birthday");
@@ -92,7 +102,7 @@ public class ChildService implements IService<ChildEntity> {
         json.put("name", child.getName());
         json.put("birthday", child.getBirthday());
         json.put("ID", child.getID());
-        json.put("parentIds", child.getParentIds());
+        json.put("parentIds", child._getParentIds());
 
         return json;
     }

@@ -19,7 +19,7 @@ public class ChildEntity extends BaseEntity {
         return birthday;
     }
 
-    public int[] getParentIds() {
+    public int[] _getParentIds() {
         return parentIds;
     }
 

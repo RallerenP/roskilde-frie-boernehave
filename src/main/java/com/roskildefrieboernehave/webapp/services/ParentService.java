@@ -1,14 +1,13 @@
 package com.roskildefrieboernehave.webapp.services;
 import com.roskildefrieboernehave.webapp.helpers.JSONHelper;
 import com.roskildefrieboernehave.webapp.entities.ParentEntity;
+import com.roskildefrieboernehave.webapp.models.Parent;
 import com.roskildefrieboernehave.webapp.utils.FileManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 
 public class ParentService implements IService<ParentEntity> {
@@ -16,41 +15,53 @@ public class ParentService implements IService<ParentEntity> {
     private HashSet<ParentEntity> parents = new HashSet<ParentEntity>();
     private FileManager fm = FileManager.getInstance();
 
-    @Override
-    public ParentEntity[] getAll() {
+    public static ParentService getInstance() {
+        return instance;
+    }
+    private static ParentService instance = new ParentService();
+
+    private ParentService() { }
+
+    public Parent[] getAll() {
         JSONObject o = fm.extractFromParentFile();
         ArrayList<JSONObject> arr = JSONHelper.getKeyArray(o);
         for (JSONObject x : arr) {
-            parents.add(mapToParent(x));
+            parents.add(mapToParentEntity(x));
         }
-        ParentEntity[] parentArr = new ParentEntity[parents.size()];
-        parents.toArray(parentArr);
+        Parent[] parentArr = new Parent[parents.size()];
+        int count = 0;
+        for(ParentEntity pe : parents) {
+            parentArr[count] = Parent.fromEntity(pe);
+            count++;
+        }
         return parentArr;
     }
 
-    @Override
-    public ParentEntity get(int ID) {
+    public Parent get(int ID) {
+        return Parent.fromEntity(getEntity(ID));
+    }
+
+    public ParentEntity getEntity(int ID) {
         JSONObject o = fm.extractFromParentFile(ID);
-        ParentEntity parent = mapToParent(o);
+        ParentEntity parent = mapToParentEntity(o);
 
         return getFromHashSet(parent);
     }
 
-    @Override
-    public ParentEntity edit(int ID, JSONObject update) {
+    public Parent edit(int ID, JSONObject update) {
         JSONObject old = fm.extractFromParentFile(ID);
         if (update.has("name")) old.put("name", update.getString("name"));
         if (update.has("phone")) old.put("phone", update.getString("phone"));
+        if (update.has("childrenIds")) old.put("childrenIds", update.getJSONArray("childrenIds"));
 
-        parents.remove(get(ID));
+        parents.remove(getEntity(ID));
 
         fm.writeToParentFile(ID, old);
 
-        return getFromHashSet(mapToParent(old));
+        return Parent.fromEntity(getFromHashSet(mapToParentEntity(old)));
     }
 
-    @Override
-    public ParentEntity create(JSONObject json) {
+    public Parent create(JSONObject json) {
         // TODO Error handling
         if (!json.has("name") || !json.has("phone")) return null;
 
@@ -62,10 +73,9 @@ public class ParentService implements IService<ParentEntity> {
         fm.writeToParentFile(ID, mapToJSON(pe));
         fm.writeToParentFile("index", ID);
 
-        return pe;
+        return Parent.fromEntity(pe);
     }
 
-    @Override
     public boolean delete(int ID) {
         parents.remove(get(ID));
         return fm.deleteFromParentFile(ID);
@@ -81,7 +91,7 @@ public class ParentService implements IService<ParentEntity> {
         return parent;
     }
 
-    private ParentEntity mapToParent(JSONObject object) {
+    private ParentEntity mapToParentEntity(JSONObject object) {
         //TODO add error handling
 
         String name = object.getString("name");
@@ -98,7 +108,7 @@ public class ParentService implements IService<ParentEntity> {
         json.put("name", parent.getName());
         json.put("phone", parent.getPhone());
         json.put("ID", parent.getID());
-        json.put("childrenIds", parent.getChildrenIds());
+        json.put("childrenIds", parent._getChildrenIds());
         return json;
     }
 }

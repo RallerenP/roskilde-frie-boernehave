@@ -19,6 +19,10 @@ public class ChildEntity extends BaseEntity {
         return birthday;
     }
 
+    public int[] getParentIds() {
+        return parentIds;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof ChildEntity)) {

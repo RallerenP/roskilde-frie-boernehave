@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    private String childFilePath = "Children";
+    private String childFilePath = "Children.JSON";
     private String parentFilePath = "Parents.JSON";
     private static FileManager instance = new FileManager();
 
@@ -56,13 +56,20 @@ public class FileManager {
     public int getParentIndex() {
         return readJSON(parentFilePath, true).getInt("index");
     }
+    public int getChildIndex() { return readJSON(childFilePath, true).getInt("index"); }
 
     public JSONObject extractFromParentFile() {
         return readJSON(parentFilePath);
     }
+    public JSONObject extractFromChildFile() { return readJSON(childFilePath); }
 
     public JSONObject extractFromParentFile(int ID) {
         JSONObject fullJson = readJSON(parentFilePath);
+        return fullJson.getJSONObject(String.valueOf(ID));
+    }
+    
+    public JSONObject extractFromChildFile(int ID) {
+        JSONObject fullJson = readJSON(childFilePath);
         return fullJson.getJSONObject(String.valueOf(ID));
     }
 
@@ -71,16 +78,28 @@ public class FileManager {
         fullJSON.remove(String.valueOf(ID));
         return writeJSON(parentFilePath, fullJSON.toString());
     }
+    
+    public boolean deleteFromChildFile(int ID ) {
+        JSONObject fullJSON = readJSON(childFilePath, true);
+        fullJSON.remove(String.valueOf(ID));
+        return writeJSON(childFilePath, fullJSON.toString());
+    }
 
     public boolean writeToParentFile(String ID, Object append) {
         JSONObject full = readJSON(parentFilePath);
         full.put(ID, append);
         return writeJSON(parentFilePath, full.toString(4));
     }
+    
+    public boolean writeToChildFile(String ID, Object append) {
+        JSONObject full = readJSON(childFilePath);
+        full.put(ID, append);
+        return writeJSON(childFilePath, full.toString(4));
+    }
 
     public boolean writeToParentFile(int ID, Object append) {
         return writeToParentFile(String.valueOf(ID), append);
     }
-
-
+    
+    public boolean writeToChildFile(int ID, Object append) { return writeToChildFile(String.valueOf(ID), append); }
 }

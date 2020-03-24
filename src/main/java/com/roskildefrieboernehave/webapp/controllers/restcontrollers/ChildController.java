@@ -1,6 +1,5 @@
-package com.roskildefrieboernehave.webapp.controllers;
+package com.roskildefrieboernehave.webapp.controllers.restcontrollers;
 
-import com.roskildefrieboernehave.webapp.entities.ChildEntity;
 import com.roskildefrieboernehave.webapp.models.Child;
 import com.roskildefrieboernehave.webapp.services.ChildService;
 import org.json.JSONObject;

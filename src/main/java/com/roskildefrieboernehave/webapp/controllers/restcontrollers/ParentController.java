@@ -1,4 +1,4 @@
-package com.roskildefrieboernehave.webapp.controllers;
+package com.roskildefrieboernehave.webapp.controllers.restcontrollers;
 import com.roskildefrieboernehave.webapp.models.Parent;
 import com.roskildefrieboernehave.webapp.services.ParentService;
 import org.json.JSONObject;

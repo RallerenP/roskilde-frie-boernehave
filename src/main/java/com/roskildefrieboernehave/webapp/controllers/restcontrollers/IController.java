@@ -1,4 +1,4 @@
-package com.roskildefrieboernehave.webapp.controllers;
+package com.roskildefrieboernehave.webapp.controllers.restcontrollers;
 
 public interface IController<T> {
     public T[] getAll();

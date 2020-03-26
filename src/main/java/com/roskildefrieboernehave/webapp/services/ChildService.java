@@ -3,6 +3,7 @@ package com.roskildefrieboernehave.webapp.services;
 import com.roskildefrieboernehave.webapp.DB.DBManager;
 import com.roskildefrieboernehave.webapp.entities.ChildEntity;
 import com.roskildefrieboernehave.webapp.helpers.JSONHelper;
+import com.roskildefrieboernehave.webapp.helpers.ReturnEntity;
 import com.roskildefrieboernehave.webapp.models.Child;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ public class ChildService implements IService<Child> {
     private ChildService() {}
 
 
-    public Child[] getAll() {
+    public ReturnEntity<Child[]> getAll() {
         JSONObject o = childDB.queryAll();
         ArrayList<JSONObject> arr = JSONHelper.getKeyArray(o);
         for (JSONObject x : arr) {
@@ -31,11 +32,11 @@ public class ChildService implements IService<Child> {
             childArr[count] = Child.fromEntity(ce);
             count++;
         }
-        return childArr;
+        return new ReturnEntity<>("Success", childArr);
     }
 
-    public Child get(int ID) {
-        return Child.fromEntity(getEntity(ID));
+    public ReturnEntity<Child> get(int ID) {
+        return new ReturnEntity<>("Success",Child.fromEntity(getEntity(ID)));
     }
 
     public ChildEntity getEntity(int ID) {
@@ -45,7 +46,7 @@ public class ChildService implements IService<Child> {
         return getFromHashSet(child);
     }
 
-    public Child edit(int ID, JSONObject update) {
+    public ReturnEntity<Child> edit(int ID, JSONObject update) {
         JSONObject old = childDB.queryById(ID);
         if (update.has("name")) old.put("name", update.getString("name"));
         if (update.has("birthday")) old.put("birthday", update.getString("birthday"));
@@ -54,26 +55,32 @@ public class ChildService implements IService<Child> {
         children.remove(getEntity(ID));
 
         if (!childDB.write(ID, old)) return null;
-        return Child.fromEntity(getFromHashSet(mapToChildEntity(old)));
+        return new ReturnEntity<>("Success", Child.fromEntity(getFromHashSet(mapToChildEntity(old))));
     }
 
-    public Child create(JSONObject json) {
+    public ReturnEntity<Child> create(JSONObject json) {
         // TODO error handling
-        if (!json.has("name") || !json.has("birthday")) return null;
+        if (!json.has("name") || !json.has("birthday")) return new ReturnEntity<>("Missing name or birthday", null);
         String name = json.getString("name"), birthday = json.getString("birthday");
         int ID = childDB.getIndex() + 1;
+
+        if (!validateBirthday(birthday)) return new ReturnEntity<>("Invalid birthday format", null);
 
         ChildEntity ce = new ChildEntity(name, birthday, ID, new int[0]);
 
         childDB.write(ID, mapToJSON(ce));
         childDB.write("index", ID);
 
-        return Child.fromEntity(ce);
+        return new ReturnEntity<>("Success", Child.fromEntity(ce));
     }
 
-    public boolean delete(int ID) {
-        children.remove(get(ID));
-        return childDB.delete(ID);
+    public ReturnEntity<Boolean> delete(int ID) {
+        children.remove(getEntity(ID));
+        return new ReturnEntity<>("Success",childDB.delete(ID));
+    }
+
+    private boolean validateBirthday(String birthday) {
+        return birthday.matches("^(?:(?:31(\\/)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/)(?:0?[13-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$");
     }
 
     private ChildEntity getFromHashSet(ChildEntity parent) {

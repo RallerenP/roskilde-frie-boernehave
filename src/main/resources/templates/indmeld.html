@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A Spring Boot Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="/js/enroll.js"></script>
+</head>
+</html>
+<body>
+    <div class="header bg-light border-bottom border-purple">
+        <a href="/">
+            <img class="float-left" src="img/placeholder-logo-2.webp" alt="Roskilde Frie Børnehaves Logo">
+            <p class="font-weight-bold float-left">Roskilde Frie Børnehave</p>
+        </a>
+    </div>
+    <div class="d-flex flex-grow-1">
+        <nav class="flex-shrink-1 m-2 position-absolute">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/">Hjem</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Indmeld Barn
+                </li>
+            </ol>
+        </nav>
+        <div class="container-fluid h-100 pt-5 d-flex flex-column pattern">
+            <div class="mt-3">
+                <h1>Indmeld Barn</h1>
+            </div>
+            <div class="mx-auto mt-5 w-50">
+                <div class="row image-form">
+                    <form class="col flex-grow-1">
+                        <div class="row form-group w-100">
+                            <label for="child_name"><h3>Navn</h3></label>
+                            <input type="text" id="child_name" class="form-control" placeholder="Mads Mikkelsen..." />
+                        </div>
+                        <div class="row form-group w-100">
+                            <label for="child_birthday"><h3>Fødselsdag</h3></label>
+                            <input type="text" id="child_birthday" class="form-control" placeholder="dd/mm/åååå"/>
+                        </div>
+                    </form>
+                    <img class="col" src="img/MadsMikkelsen.jpg">
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="shadow mt-5 bg-light p-3">
+                            <h3>Kontakt Information</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col">
+                                        <input id="parent1_name" type="text" class="form-control" placeholder="Navn"/>
+                                    </div>
+                                    <div class="col">
+                                        <input id="parent1_phone" type="text" class="form-control" placeholder="Telefon"/>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Navn"/>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Telefon"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col align-items-end">
+                        <div class="row h-100 justify-content-end align-items-end">
+                            <div class="">
+                                <button id="cancel" class="btn btn-danger m-1">Annuller</button>
+                                <button id="confirm" class="btn btn-success m-1">Indmeld</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>

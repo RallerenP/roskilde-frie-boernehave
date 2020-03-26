@@ -1,5 +1,6 @@
 package com.roskildefrieboernehave.webapp.controllers.restcontrollers;
 
+import com.roskildefrieboernehave.webapp.helpers.ReturnEntity;
 import com.roskildefrieboernehave.webapp.models.Child;
 import com.roskildefrieboernehave.webapp.services.ChildService;
 import org.json.JSONObject;
@@ -11,13 +12,13 @@ public class ChildController implements IController{
 
     @Override
     @GetMapping("/children")
-    public Child[] getAll() {
+    public ReturnEntity<Child[]> getAll() {
         return cs.getAll();
     }
 
     @Override
     @GetMapping("/children/{id}")
-    public Child get(
+    public ReturnEntity<Child> get(
             @PathVariable("id") int id
     ) {
         return cs.get(id);
@@ -25,7 +26,7 @@ public class ChildController implements IController{
 
     @Override
     @PutMapping("/children/{id}")
-    public Child edit(
+    public ReturnEntity<Child> edit(
             @PathVariable("id") int id,
             @RequestBody String s
     ) {
@@ -35,7 +36,7 @@ public class ChildController implements IController{
 
     @Override
     @PostMapping("/children")
-    public Child create(
+    public ReturnEntity<Child> create(
             @RequestBody String s
     ) {
         JSONObject o = new JSONObject(s);
@@ -44,7 +45,7 @@ public class ChildController implements IController{
 
     @Override
     @DeleteMapping("/children/{id}")
-    public boolean delete(
+    public ReturnEntity<Boolean> delete(
             @PathVariable("id") int id
     ) {
         return cs.delete(id);

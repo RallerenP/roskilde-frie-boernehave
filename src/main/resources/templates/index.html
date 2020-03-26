@@ -2,9 +2,49 @@
 <html>
     <head>
         <title>A Spring Boot Application</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/styles.css">
+        <script src="/js/jquery.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="/js/home.js"></script>
     </head>
 </html>
 <body>
-    <h1>Mads Mikkelsen Fan Side</h1>
-    <img src="/img/MadsMikkelsen.jpg">
+    <div class="header bg-light border-bottom border-purple">
+        <a href="/">
+            <img class="float-left" src="img/placeholder-logo-2.webp" alt="Roskilde Frie Børnehaves Logo">
+            <p class="font-weight-bold float-left">Roskilde Frie Børnehave</p>
+        </a>
+    </div>
+    <div class="d-flex flex-grow-1">
+        <nav class="flex-shrink-1 m-2 position-absolute">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    Hjem
+                </li>
+            </ol>
+        </nav>
+        <div class="container-fluid h-100 d-flex align-items-center">
+            <div class="row w-100">
+                <div class="col d-flex flex-column align-items-center justify-content-center">
+                    <div class="card">
+                        <img class="rounded" src="/img/BørneBillede.png" alt="Billede af børn">
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary">Vis Børn</button>
+                        <button id="addChildBtn" class="btn btn-outline-primary">Indmeld Barn</button>
+                    </div>
+                </div>
+                <div class="col d-flex flex-column align-items-center justify-content-center">
+                    <div class="card">
+                        <img class="rounded" src="/img/Skema.png" alt="Billede af skema">
+                    </div>
+                    <button  class="btn btn-outline-primary">Vis skema</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </body>
